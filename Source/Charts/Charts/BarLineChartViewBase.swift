@@ -530,6 +530,29 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
     }
     
+    @objc open func defaultTapPos(_ pos:CGPoint)
+    {
+        if _data === nil
+        {
+            return
+        }
+        
+        if !self.isHighLightPerTapEnabled { return }
+        
+        let h = getHighlightByTouchPoint(pos)
+        
+        if h === nil || h!.isEqual(self.lastHighlighted)
+        {
+            self.highlightValue(nil, callDelegate: true)
+            self.lastHighlighted = nil
+        }
+        else
+        {
+            self.highlightValue(h, callDelegate: true)
+            self.lastHighlighted = h
+        }
+    }
+    
     @objc fileprivate func doubleTapGestureRecognized(_ recognizer: NSUITapGestureRecognizer)
     {
         if _data === nil

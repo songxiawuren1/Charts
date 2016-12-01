@@ -130,8 +130,11 @@ open class LineChartRenderer: LineRadarRenderer
             
             if cur == nil { return }
             
+            cubicPath.move(to: CGPoint(x:-viewPortHandler!.offsetLeft,y:CGFloat(cur.y * phaseY)), transform: valueToPixelMatrix)
+            cubicPath.addLine(to: CGPoint(x: CGFloat(cur.x), y: CGFloat(cur.y * phaseY)), transform: valueToPixelMatrix)
+            
             // let the spline start
-            cubicPath.move(to: CGPoint(x: CGFloat(cur.x), y: CGFloat(cur.y * phaseY)), transform: valueToPixelMatrix)
+            //cubicPath.move(to: CGPoint(x: CGFloat(cur.x), y: CGFloat(cur.y * phaseY)), transform: valueToPixelMatrix)
             
             for j in stride(from: firstIndex, through: lastIndex, by: 1)
             {
@@ -161,6 +164,7 @@ open class LineChartRenderer: LineRadarRenderer
                         y: (CGFloat(cur.y) - curDy) * CGFloat(phaseY)),
                     transform: valueToPixelMatrix)
             }
+            cubicPath.addLine(to: CGPoint(x: CGFloat(viewPortHandler!.screenWidth), y: CGFloat(cur.y * phaseY)), transform: valueToPixelMatrix)
         }
         
         context.saveGState()
@@ -267,12 +271,20 @@ open class LineChartRenderer: LineRadarRenderer
             return
         }
         
-        let fillMin = dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0
+        //let fillMin = dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0
+        let fillMin = CGFloat(dataProvider.chartYMin)
 
-        var pt1 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min + bounds.range)?.x ?? 0.0), y: fillMin)
-        var pt2 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min)?.x ?? 0.0), y: fillMin)
+        //var pt1 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min + bounds.range)?.x ?? 0.0), y: fillMin)
+        //var pt2 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min)?.x ?? 0.0), y: fillMin)
+        
+        var pt1 = CGPoint(x: CGFloat(dataProvider.chartXMin) , y: fillMin)
+        var pt2 = CGPoint(x: CGFloat(dataProvider.chartXMax), y: fillMin)
+        
         pt1 = pt1.applying(matrix)
         pt2 = pt2.applying(matrix)
+        
+        pt1 = CGPoint(x: pt1.x - viewPortHandler!.offsetLeft, y: pt1.y)
+        pt2 = CGPoint(x:pt2.x + viewPortHandler!.offsetRight,y:pt2.y)
         
         spline.addLine(to: pt1)
         spline.addLine(to: pt2)

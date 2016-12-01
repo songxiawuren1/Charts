@@ -164,10 +164,16 @@ open class XAxisRenderer: AxisRendererBase
             || xAxis.labelPosition == .bottomInside
             || xAxis.labelPosition == .bothSided
         {
-            _axisLineSegmentsBuffer[0].x = viewPortHandler.contentLeft
+            _axisLineSegmentsBuffer[0].x = 0
             _axisLineSegmentsBuffer[0].y = viewPortHandler.contentBottom
-            _axisLineSegmentsBuffer[1].x = viewPortHandler.contentRight
+            _axisLineSegmentsBuffer[1].x = viewPortHandler.screenWidth
             _axisLineSegmentsBuffer[1].y = viewPortHandler.contentBottom
+            context.strokeLineSegments(between: _axisLineSegmentsBuffer)
+            //绘制上面的线
+            _axisLineSegmentsBuffer[0].x = 0
+            _axisLineSegmentsBuffer[0].y = viewPortHandler.contentTop
+            _axisLineSegmentsBuffer[1].x = viewPortHandler.screenWidth
+            _axisLineSegmentsBuffer[1].y = viewPortHandler.contentTop
             context.strokeLineSegments(between: _axisLineSegmentsBuffer)
         }
         

@@ -33,10 +33,20 @@ open class LineRadarRenderer: LineScatterCandleRadarRenderer
         // filled is usually drawn with less alpha
         context.setAlpha(fillAlpha)
         
-        fill.fillPath(context: context, rect: viewPortHandler.contentRect)
+        fill.fillPath(context: context, rect: fillClippingRect)
         
         context.restoreGState()
     }
+    
+    open var fillClippingRect: CGRect
+    {
+        var contentRect = viewPortHandler?.contentRect ?? CGRect.zero
+        contentRect.origin.x = 0;
+        contentRect.size.width = viewPortHandler?.screenWidth ?? 0.0
+        return contentRect
+    }
+    
+    
     
     /// Draws the provided path in filled mode with the provided color and alpha.
     open func drawFilledPath(context: CGContext, path: CGPath, fillColor: NSUIColor, fillAlpha: CGFloat)

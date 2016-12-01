@@ -287,6 +287,7 @@ open class Fill: NSObject
             )
             
             context.clip()
+            context.clip(to: rect)
             context.drawLinearGradient(_gradient!,
                 start: startPoint,
                 end: endPoint,

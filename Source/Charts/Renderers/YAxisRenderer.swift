@@ -213,6 +213,8 @@ open class YAxisRenderer: AxisRendererBase
         let dy = self.axis?.gridLineWidth ?? 0.0
         contentRect.origin.y -= dy / 2.0
         contentRect.size.height += dy
+        contentRect.origin.x = 0;
+        contentRect.size.width = self.axis!.screenWidth
         return contentRect
     }
     
@@ -225,8 +227,12 @@ open class YAxisRenderer: AxisRendererBase
             else { return }
         
         context.beginPath()
+        /*
         context.move(to: CGPoint(x: viewPortHandler.contentLeft, y: position.y))
         context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: position.y))
+ */
+        context.move(to: CGPoint(x: 0, y: position.y))
+        context.addLine(to: CGPoint(x: self.axis!.screenWidth, y: position.y))
         context.strokePath()
     }
     
